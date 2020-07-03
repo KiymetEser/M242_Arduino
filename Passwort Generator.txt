@@ -1,0 +1,88 @@
+#include <LiquidCrystal.h>
+// initialize the library with the numbers of the interface pins
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+
+int createSimpleButton = 6;
+int createComplexButton = 7;
+int increaseLenghtButton = 8;
+int decreaseLenghtButton = 9;
+int lenght = 8;
+String pwd = "";
+
+void setup() {
+  // set up the LCD's number of columns and rows:
+  lcd.begin(16, 2);
+  // Print a message to the LCD.
+  lcd.setCursor(0,0);
+  lcd.print("Password");
+  lcd.setCursor(0,1);
+  lcd.print("Generator");
+  
+ pinMode(createSimpleButton, INPUT);
+ pinMode(createComplexButton, INPUT);
+ pinMode(increaseLenghtButton, INPUT);
+ pinMode(decreaseLenghtButton, INPUT);
+  
+delay(3000);
+lcd.clear();
+}
+
+void loop() {
+  if(digitalRead(createSimpleButton) == HIGH){
+   generateSimplePwd();
+  }
+  
+  if(digitalRead(createComplexButton) == HIGH){
+    generateComplexPwd();
+  }
+  
+  if(digitalRead(increaseLenghtButton) == HIGH){
+    increaseLenght();
+  }
+  
+ 
+  if(digitalRead(decreaseLenghtButton) == HIGH){
+    decreaseLenght();
+  }
+}
+
+void generateSimplePwd(){
+  String letters[40] = {"a", "b", "c", "d", "e", "f","g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
+ 
+  pwd = "";
+  for(int i = 0; i < lenght; i++){
+      String c = letters[random(0, 40)];
+      pwd += c;
+  }
+  printPWD();
+} 
+
+void generateComplexPwd(){
+  String letters[72] = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
+              "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "$", "_", "-", ",", ".", ":" };
+  pwd = "";
+  for(int i = 0; i < lenght; i++){
+      String c = letters[random(0, 72)];
+      pwd += c; 
+  }
+  printPWD();
+}
+
+void increaseLenght(){
+    lenght ++;
+  
+  printPWD();
+}
+
+void decreaseLenght(){
+    lenght--;
+  
+  printPWD();
+}
+
+void printPWD(){
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print(pwd);
+}
+ 

@@ -1,0 +1,74 @@
+// include the library code:
+#include <LiquidCrystal.h>
+
+// initialize the library with the numbers of the interface pins
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+
+//Variablen
+int infiszierte = 0;
+int tote = 0;
+int geheilte = 0;
+
+void setup() {
+  //Initialisierung Knöpfe
+  pinMode(6, INPUT);
+  pinMode(7, INPUT);
+  pinMode(8, INPUT);
+  pinMode(9, INPUT);
+  
+  // set up the LCD's number of columns and rows:
+  lcd.begin(16, 2);
+  
+  //Wilkommens Statement
+  lcd.setCursor(0, 0);
+  lcd.print("Willkommen beim");
+  lcd.setCursor(0, 1);
+  lcd.print("Corona-Klicker");
+  delay(10000);  
+  lcd.clear();
+}
+
+void loop() {
+  
+  //Wenn Knopf gedrückt
+  if(digitalRead(6)){
+    infiszierte = infiszierte + 1;
+    printData();
+  }
+   if(digitalRead(7)){
+    tote = tote + 1;
+    infiszierte = infiszierte - 1; 
+    printData();
+  }
+   if(digitalRead(8)){
+    geheilte = geheilte + 1;
+    infiszierte = infiszierte - 1;
+    printData();
+  }
+   if(digitalRead(9)){
+  reset();
+    printData();
+  }
+}
+
+void printData() {
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Inf:");
+  lcd.setCursor(4, 0);
+  lcd.print(infiszierte);
+  lcd.setCursor(9, 0);
+  lcd.print("Geh:");
+  lcd.setCursor(13, 0);
+  lcd.print(geheilte);
+  lcd.setCursor(0, 1);
+  lcd.print("Tote:");
+  lcd.setCursor(5, 1);
+  lcd.print(tote);
+}
+
+void reset() {
+  infiszierte = 0;
+  tote = 0;
+  geheilte = 0;
+}

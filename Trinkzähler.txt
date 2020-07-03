@@ -1,0 +1,85 @@
+// include the library code:
+#include <LiquidCrystal.h>
+
+// initialize the library with the numbers of the interface pins
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+
+//Variablen
+float totalWasser = 4;
+float getrunken = 0;
+float glasWasser = 0.25;
+
+void setup() {
+  //Initialisierung der Input Pins
+  pinMode(6, INPUT);
+  pinMode(7, INPUT);
+  pinMode(8, OUTPUT);
+  pinMode(9, OUTPUT);
+  pinMode(10, OUTPUT);
+    
+  // set up the LCD's number of columns and rows:
+  lcd.begin(16, 2);
+  
+  //Wilkommens Statement
+  lcd.setCursor(0, 0);
+  lcd.print("Willkommen beim");
+  lcd.setCursor(0, 1);
+  lcd.print("Trinkzaehler");
+  delay(10000);  
+  lcd.clear();
+  printData();
+  ledStatus();
+}
+
+void loop() {
+  
+  //Wenn reset Knopf gedrückt
+  if(digitalRead(6)){
+    reset();
+    ledStatus();
+    printData();
+  }
+  //Wenn getrunken Knopf gedrückt
+   if(digitalRead(7)){
+    glasGetrunken();
+    ledStatus();
+    printData();
+  }
+}
+
+void reset() {
+ getrunken = 0;
+}
+
+void glasGetrunken() {
+ getrunken = getrunken + glasWasser;
+}
+
+void printData() {
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print("Getrunken:");
+  lcd.setCursor(10, 0);
+  lcd.print(getrunken);
+  lcd.setCursor(0, 1);
+  lcd.print("N.trinken:");
+  lcd.setCursor(10, 1);
+  lcd.print(totalWasser - getrunken);
+}
+
+void ledStatus() {
+  float wasserLedStatus = getrunken / totalWasser;
+  digitalWrite(10, LOW);
+  digitalWrite(9, LOW);
+  digitalWrite(8, LOW);
+  
+  if(wasserLedStatus >= 1) {
+    digitalWrite(10, HIGH);
+  }
+  else if(wasserLedStatus >= 0.5) {
+    digitalWrite(9, HIGH);
+  }
+  else {
+    digitalWrite(8, HIGH);
+  }
+}

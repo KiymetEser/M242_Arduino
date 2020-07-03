@@ -1,0 +1,69 @@
+// include the library code:
+#include <LiquidCrystal.h>
+
+// initialize the library with the numbers of the interface pins
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+
+float total;
+float noch;
+bool start=false;
+
+void setup() {
+  pinMode(6, INPUT);
+  pinMode(7, INPUT);
+  pinMode(8, INPUT);
+  pinMode(9, INPUT);
+  pinMode(10, OUTPUT);
+  
+  lcd.begin(16, 2);
+  lcd.setCursor(0, 0);
+  lcd.print("Willkommen beim");
+  lcd.setCursor(0, 1);
+  lcd.print("Timer");
+  delay(10000);
+  lcd.clear();
+}
+
+void printData() {
+ lcd.clear();
+ lcd.setCursor(0,0);
+ lcd.print("Total:");
+ lcd.setCursor(7,0);
+ lcd.print(total);
+ lcd.setCursor(0,1);
+ lcd.print("noch:");
+ lcd.setCursor(6,1);
+ lcd.print(noch);
+  
+}
+
+void loop() {
+  if(digitalRead(9)){
+    start = !start; 
+    printData();
+  }
+  if(digitalRead(8)){
+    total = total + 10;
+    printData();
+  }
+  if(digitalRead(7)){
+    total = total + 30;
+    printData();
+  }
+  if(digitalRead(6)){
+    noch=total;
+    start=false;
+    printData();
+  }
+  if(start){
+    delay(100);
+    noch=noch-0.1;
+    printData();
+  }
+  if(noch<=0){
+    digitalWrite(10, HIGH);
+  } 
+  else {
+  	digitalWrite(10, LOW);
+  }
+}
